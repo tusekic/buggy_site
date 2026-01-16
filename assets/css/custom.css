@@ -203,14 +203,25 @@ header
 --------------------------------------------- 
 */
 
+.background-header .language-bar{
+  background: rgba(230,230,230,0.95) !important;
+  box-shadow: 0px 7px 8px 1px rgba(0,0,0,0.15)!important;
+
+}
+
+.background-header .language-bar p{
+  color: black;
+
+}
+
 .background-header {
-  background: rgba(250,250,250,0.99) !important;
+  background: rgba(230,230,230,0.95) !important;
   height: 80px!important;
   position: fixed!important;
   top: 0px;
   left: 0px;
   right: 0px;
-  box-shadow: 0px 0px 10px rgba(0,0,0,0.15)!important;
+  box-shadow: 0px 3px 10px rgba(0,0,0,0.15)!important;
 }
 
 .background-header .logo,
@@ -488,7 +499,6 @@ header
   }
   .header-area {
     background-color: #f7f7f7;
-    padding: 0px 15px;
     height: 80px;
     box-shadow: none;
     text-align: center;
@@ -527,7 +537,7 @@ header
 
   .header-area .main-nav .nav li:last-child a:hover,
   .header-area .main-nav .nav li:last-child:hover a {
-    background: #eee !important;
+    background: rgba(250, 250, 250, 0.95) !important;
     color: #25D366 !important;
   }
   .header-area.header-sticky .nav {
@@ -545,12 +555,12 @@ header
     line-height: 50px !important;
     padding: 0px !important;
     border: none !important;
-    background: #f7f7f7 !important;
+    background: rgba(230, 230, 230, 0.95) !important;
     color: #232d39 !important;
   }
   .header-area .main-nav .nav li:last-child a {
     color: #25D366 !important;
-    background: #f7f7f7 !important;
+    background: rgba(230, 230, 230, 0.95) !important;
     height: 50px !important;
     line-height: 50px !important;
     font-size: 13px !important;
@@ -565,7 +575,7 @@ header
     content: "WHATSAPP";
   }
   .header-area .main-nav .nav li a:hover {
-    background: #eee !important;
+    background: rgba(250, 250, 250, 0.95) !important;
     color: #ed563b!important;
   }
   .header-area .main-nav .nav li.submenu ul {
@@ -1279,4 +1289,65 @@ responsive
   .vehicle-card.vehicle-reverse {
     flex-direction: column !important;
   }
+}
+
+/* Language selector */
+.language-bar {
+  border-radius: 0 0 8px 0px;
+  width: 250px;
+  background: rgba(250, 250, 250, 0.1);
+  padding: 8px 0;
+  visibility: visible;
+}
+
+.language-selector {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+}
+
+.language-selector a {
+
+  color: #fff;
+  font-weight: 600;
+  text-decoration: none;
+  margin: 0 5px;
+  transition: color 0.3s ease;
+}
+
+.language-selector a:hover {
+  color: #ed563b;
+}
+
+.language-selector a.active {
+  color: #ed563b;
+}
+
+.language-selector span {
+  color: #838383;
+  font-size: 20px;
+}
+
+.language-bar.active{
+  visibility: hidden;
+}
+
+.language-bar img{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 30px
+}
+
+.language-bar p {
+  padding-left: 3px;
+  color: white;
+}
+
+.language-bar a {
+  display: flex;
+  justify-content: center; /* horizontal center */
+  align-items: center;
+       /* vertical center */
 }
