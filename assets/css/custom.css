@@ -616,9 +616,7 @@ header
     font-size: 18px;
     margin-left: 10px;
   }
-  .header-area .main-nav .menu-trigger {
-    right: 15px;
-  }
+
 }
 
 @media (min-width: 992px) {
@@ -1294,9 +1292,9 @@ responsive
 /* Language selector */
 .language-bar {
   border-radius: 0 0 8px 0px;
-  width: 250px;
+  width: 190px;
   background: rgba(250, 250, 250, 0.1);
-  padding: 8px 0;
+  padding: 3px 0;
   visibility: visible;
 }
 
@@ -1304,7 +1302,6 @@ responsive
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 14px;
 }
 
 .language-selector a {
@@ -1337,12 +1334,13 @@ responsive
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 30px
+  width: 25px
 }
 
 .language-bar p {
   padding-left: 3px;
   color: white;
+  font-size: 13px;
 }
 
 .language-bar a {
