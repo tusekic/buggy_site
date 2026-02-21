@@ -131,13 +131,15 @@
 		}
 
 		var track = carousel.querySelector('.tours-track');
+		var viewport = carousel.querySelector('.tours-viewport');
 		var slides = carousel.querySelectorAll('.tour-slide');
 		var dots = carousel.querySelectorAll('.tours-dot');
 		var prevBtn = carousel.querySelector('.tours-nav.prev');
 		var nextBtn = carousel.querySelector('.tours-nav.next');
 		var currentIndex = 0;
 		var touchStartX = 0;
-		var touchEndX = 0;
+		var touchCurrentX = 0;
+		var isTouching = false;
 
 		if (!track || !slides.length) {
 			return;
@@ -182,22 +184,48 @@
 			});
 		});
 
-		track.addEventListener('touchstart', function(event) {
-			touchStartX = event.changedTouches[0].screenX;
-		}, { passive: true });
-
-		track.addEventListener('touchend', function(event) {
-			touchEndX = event.changedTouches[0].screenX;
-			var swipeDistance = touchEndX - touchStartX;
-			if (Math.abs(swipeDistance) < 40) {
+		function handleTouchStart(event) {
+			if (!event.touches || !event.touches.length) {
 				return;
 			}
+			isTouching = true;
+			touchStartX = event.touches[0].clientX;
+			touchCurrentX = touchStartX;
+		}
+
+		function handleTouchMove(event) {
+			if (!isTouching || !event.touches || !event.touches.length) {
+				return;
+			}
+			touchCurrentX = event.touches[0].clientX;
+		}
+
+		function handleTouchEnd() {
+			if (!isTouching) {
+				return;
+			}
+			var swipeDistance = touchCurrentX - touchStartX;
+			isTouching = false;
+
+			if (Math.abs(swipeDistance) < 35) {
+				return;
+			}
+
 			if (swipeDistance < 0) {
 				updateCarousel(currentIndex + 1);
 			} else {
 				updateCarousel(currentIndex - 1);
 			}
-		}, { passive: true });
+		}
+
+		if (viewport) {
+			viewport.addEventListener('touchstart', handleTouchStart, { passive: true });
+			viewport.addEventListener('touchmove', handleTouchMove, { passive: true });
+			viewport.addEventListener('touchend', handleTouchEnd, { passive: true });
+			viewport.addEventListener('touchcancel', function() {
+				isTouching = false;
+			}, { passive: true });
+		}
 
 		window.addEventListener('keydown', function(event) {
 			if (event.key === 'ArrowRight') {

@@ -11,8 +11,57 @@
 #main_buttons{
 
   display: flex;
-  justify-content: center
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
 
+}
+
+.social-main-btn {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.social-main-btn img {
+  width: 24px;
+  height: 24px;
+  display: block;
+}
+
+.social-main-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.28);
+}
+
+.facebook-btn {
+  background-color: #1877f2;
+}
+
+.instagram-btn {
+  background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285aeb 90%);
+}
+
+@media (max-width: 767px) {
+  #main_buttons {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .social-main-btn {
+    width: 46px;
+    height: 46px;
+  }
+
+  .social-main-btn img {
+    width: 22px;
+    height: 22px;
+  }
 }
 
 
@@ -112,7 +161,7 @@ ul {
 }
 
 p {
-  font-size: 14px;
+  font-size: 15px;
   line-height: 25px;
   color: #7a7a7a;
 }
@@ -156,8 +205,8 @@ body {
 
 .section-heading {
   text-align: center;
-  margin-top: 140px;
-  margin-bottom: 80px;
+  margin-top: 80px;
+  margin-bottom: 60px;
 }
 
 .section-heading h2 {
