@@ -123,6 +123,94 @@
 		mobileNav();
 	});
 
+	// Tours carousel
+	(function initToursCarousel() {
+		var carousel = document.querySelector('[data-carousel]');
+		if (!carousel) {
+			return;
+		}
+
+		var track = carousel.querySelector('.tours-track');
+		var slides = carousel.querySelectorAll('.tour-slide');
+		var dots = carousel.querySelectorAll('.tours-dot');
+		var prevBtn = carousel.querySelector('.tours-nav.prev');
+		var nextBtn = carousel.querySelector('.tours-nav.next');
+		var currentIndex = 0;
+		var touchStartX = 0;
+		var touchEndX = 0;
+
+		if (!track || !slides.length) {
+			return;
+		}
+
+		function updateCarousel(index) {
+			if (index < 0) {
+				index = slides.length - 1;
+			}
+			if (index >= slides.length) {
+				index = 0;
+			}
+
+			currentIndex = index;
+			track.style.transform = 'translateX(-' + (currentIndex * 100) + '%)';
+
+			dots.forEach(function(dot, dotIndex) {
+				var isActive = dotIndex === currentIndex;
+				dot.classList.toggle('active', isActive);
+				dot.setAttribute('aria-selected', isActive ? 'true' : 'false');
+			});
+		}
+
+		if (prevBtn) {
+			prevBtn.addEventListener('click', function() {
+				updateCarousel(currentIndex - 1);
+			});
+		}
+
+		if (nextBtn) {
+			nextBtn.addEventListener('click', function() {
+				updateCarousel(currentIndex + 1);
+			});
+		}
+
+		dots.forEach(function(dot) {
+			dot.addEventListener('click', function() {
+				var index = parseInt(dot.getAttribute('data-slide'), 10);
+				if (!isNaN(index)) {
+					updateCarousel(index);
+				}
+			});
+		});
+
+		track.addEventListener('touchstart', function(event) {
+			touchStartX = event.changedTouches[0].screenX;
+		}, { passive: true });
+
+		track.addEventListener('touchend', function(event) {
+			touchEndX = event.changedTouches[0].screenX;
+			var swipeDistance = touchEndX - touchStartX;
+			if (Math.abs(swipeDistance) < 40) {
+				return;
+			}
+			if (swipeDistance < 0) {
+				updateCarousel(currentIndex + 1);
+			} else {
+				updateCarousel(currentIndex - 1);
+			}
+		}, { passive: true });
+
+		window.addEventListener('keydown', function(event) {
+			if (event.key === 'ArrowRight') {
+				updateCarousel(currentIndex + 1);
+			}
+			if (event.key === 'ArrowLeft') {
+				updateCarousel(currentIndex - 1);
+			}
+		});
+
+		updateCarousel(0);
+	})();
+
 
 	// Window Resize Mobile Menu Fix
 	function mobileNav() {
