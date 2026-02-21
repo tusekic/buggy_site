@@ -653,6 +653,27 @@ header
   .header-area .main-nav .nav li.submenu:hover ul, .header-area .main-nav .nav li.submenu:focus ul {
     height: 0px;
   }
+
+  /* Keep dropdown style consistent when header becomes background-header on scroll */
+  .background-header .main-nav .nav {
+    background: rgba(230, 230, 230, 0.97) !important;
+    border-top: 1px solid rgba(0, 0, 0, 0.08) !important;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.14) !important;
+  }
+
+  .background-header .main-nav .nav li {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
+  }
+
+  .background-header .main-nav .nav li a {
+    background: transparent !important;
+    color: #232d39 !important;
+  }
+
+  .background-header .main-nav .nav li a:hover {
+    background: rgba(237, 86, 59, 0.12) !important;
+    color: #ed563b !important;
+  }
 }
 
 @media (max-width: 575px) {
