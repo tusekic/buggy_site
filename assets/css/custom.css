@@ -581,10 +581,35 @@ header
 }
 
 @media (max-width: 991px) {
+  .header-area,
+  .header-area.header-sticky,
+  .header-area.background-header {
+    height: 60px;
+    min-height: 60px;
+  }
+
+  .background-header {
+    height: 60px !important;
+    min-height: 60px !important;
+  }
+
+  .header-area .main-nav {
+    min-height: 60px;
+  }
+
+  .background-header .main-nav {
+    min-height: 60px;
+  }
+
+  .header-area .language-bar,
+  .background-header .language-bar {
+    margin-top: 0;
+  }
+
   .header-area .main-nav .logo {
     color: #1e1e1e;
     font-size: 24px;
-    line-height: 70px;
+    line-height: 60px;
   }
   .header-area.header-sticky .nav li a:hover,
   .header-area.header-sticky .nav li a.active {
@@ -593,13 +618,20 @@ header
   }
   .header-area {
     background-color: #f7f7f7;
-    height: 70px;
     box-shadow: none;
     text-align: center;
   }
   .header-area .container {
+    width: 100%;
+    max-width: 100%;
     padding: 0px;
   }
+
+  .header-area .col-12 {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
   .header-area .row {
     margin-left: 0;
     margin-right: 0;
@@ -609,6 +641,28 @@ header
   }
   .header-area .menu-trigger {
     display: block !important;
+    top: 9px;
+    right: 16px;
+    width: 26px;
+    height: 26px;
+  }
+
+  .header-area .main-nav .menu-trigger span,
+  .header-area .main-nav .menu-trigger span:before,
+  .header-area .main-nav .menu-trigger span:after {
+    width: 24px;
+  }
+
+  .header-area .main-nav .menu-trigger span {
+    top: 11px;
+  }
+
+  .header-area .main-nav .menu-trigger span:before {
+    top: -8px;
+  }
+
+  .header-area .main-nav .menu-trigger span:after {
+    top: 8px;
   }
   .header-area .main-nav {
     overflow: hidden;
@@ -622,7 +676,7 @@ header
     -o-transition: all 0s ease 0s;
     transition: all 0s ease 0s;
     margin-left: 0px;
-    margin-top: 70px !important;
+    margin-top: 60px !important;
     background: rgba(255, 255, 255, 0.98);
     border-top: 1px solid #ececec;
     border-bottom-left-radius: 0;
@@ -643,7 +697,7 @@ header
     color: #25d366 !important;
   }
   .header-area.header-sticky .nav {
-    margin-top: 70px !important;
+    margin-top: 60px !important;
   }
   .header-area .main-nav .nav li {
     width: 100%;
