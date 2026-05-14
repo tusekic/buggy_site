@@ -1,10 +1,3 @@
-/**
- * gallery.js — Dynamic gallery loader + fast tab filter + lightbox
- *
- * Filtriranje: display:none (instant, bez glitcha) + fade-in animacija
- * na novim stavkama. Nema opacity/position haka koji su uzrokovali glitch.
- */
-
 (function () {
   'use strict';
 
@@ -23,11 +16,10 @@
 
   if (!grid || !tabsList) return;
 
-  /* Čitaj kategorije iz postojećih HTML tabova */
   var tabEls = Array.prototype.slice.call(tabsList.querySelectorAll('.gallery-tab'));
   if (!tabEls.length) return;
 
-  var categories = tabEls.map(function (el) {
+  var categories     = tabEls.map(function (el) {
     return { folder: el.dataset.category, el: el, label: (el.querySelector('strong') || el).textContent.trim() };
   });
 
@@ -35,6 +27,13 @@
   var allItems       = [];
   var activeIndex    = -1;
   var loadedCount    = 0;
+  var isMobile       = window.matchMedia('(max-width: 767px)').matches;
+
+  /* Ažuriraj isMobile pri resizeu */
+  window.addEventListener('resize', function () {
+    isMobile = window.matchMedia('(max-width: 767px)').matches;
+    updateLightboxArrows();
+  });
 
   /* Bindaj tabove */
   categories.forEach(function (cat) {
@@ -60,12 +59,12 @@
   }
 
   function onCategoryLoaded(cat, images) {
-    var isFirst = (cat.folder === categories[0].folder);
-
     images.forEach(function (d) {
       var item = document.createElement('div');
-      /* Skrivene kategorije odmah display:none — bez ikakvih position haka */
-      item.className = 'gallery-item gallery-loading' + (isFirst ? '' : ' gallery-hidden');
+      /* Vidljivost određuje activeCategory u TRENUTKU dodavanja, ne folder prve kategorije.
+         To sprječava glitch kad async load završi nakon što je korisnik već promijenio tab. */
+      var isVisible = (cat.folder === activeCategory);
+      item.className = 'gallery-item gallery-loading' + (isVisible ? '' : ' gallery-hidden');
       item.dataset.category = cat.folder;
 
       var img = document.createElement('img');
@@ -106,12 +105,10 @@
     entry.img.src = entry.src;
   }
 
-  /* Filtriranje — čisti display:none, instant switch, fade-in na novim */
+  /* Filtriranje */
   function filterCategory(category) {
+    /* Zanemari klik na već aktivnu kategoriju */
     if (category === activeCategory) return;
-
-    tabsList.classList.add('switching');
-    setTimeout(function () { tabsList.classList.remove('switching'); }, 300);
 
     activeCategory = category;
 
@@ -119,34 +116,31 @@
       el.classList.toggle('active', el.dataset.category === category);
     });
 
-    /* Korak 1: sakrij sve što nije nova kategorija (sync, instant) */
+    /* Korak 1 (sync): sakrij stare, pripremi nove bez animacijske klase */
+    var toShow = [];
+    var visible = 0;
     allItems.forEach(function (e) {
-      if (e.category !== category) {
+      if (e.category === category) {
+        /* Makni sve klase vezane uz animaciju i skrivanje */
+        e.el.classList.remove('gallery-hidden', 'gallery-appearing');
+        if (!e.img.src) loadImg(e);
+        toShow.push(e.el);
+        visible++;
+      } else {
         e.el.classList.remove('gallery-appearing');
         e.el.classList.add('gallery-hidden');
       }
     });
 
-    /* Korak 2: prikaži novu kategoriju u sljedećem frame-u
-       — browser ima frame da makne stare elemente iz layouta,
-         pa nema glitcha ni freezea od force-reflow-a */
-    var visible = 0;
-    var toShow = [];
-    allItems.forEach(function (e) {
-      if (e.category === category) {
-        e.el.classList.remove('gallery-hidden', 'gallery-appearing');
-        if (!e.img.src) loadImg(e);
-        toShow.push(e.el);
-        visible++;
-      }
-    });
-
     if (emptyMsg) emptyMsg.classList.toggle('visible', visible === 0);
 
-    /* Dodaj animacijsku klasu tek u sljedećem animation frame —
-       bez ikakvog force reflow, browser sam zna da su elementi novi */
+    /* Korak 2: dodaj animaciju u idućem frame — bez ikakvog reflow blokera */
     requestAnimationFrame(function () {
-      toShow.forEach(function (el) { el.classList.add('gallery-appearing'); });
+      requestAnimationFrame(function () {
+        /* Dvostruki rAF osigurava da browser završi paint skrivanja
+           prije nego animira nove elemente — potpuno bez freezea */
+        toShow.forEach(function (el) { el.classList.add('gallery-appearing'); });
+      });
     });
   }
 
@@ -159,6 +153,13 @@
   }
 
   /* Lightbox */
+  function updateLightboxArrows() {
+    if (!lbPrev || !lbNext) return;
+    var hide = isMobile;
+    lbPrev.style.display = hide ? 'none' : '';
+    lbNext.style.display = hide ? 'none' : '';
+  }
+
   function visibleItems() {
     return allItems.filter(function (e) { return e.category === activeCategory; });
   }
@@ -167,6 +168,7 @@
     if (!lightbox || !lbImg) return;
     activeIndex = visibleItems().indexOf(entry);
     showLbImage(entry);
+    updateLightboxArrows();
     lightbox.classList.add('active');
     document.body.style.overflow = 'hidden';
   }
@@ -207,7 +209,7 @@
 
     var tx = 0;
     lightbox.addEventListener('touchstart', function (e) { tx = e.touches[0].clientX; }, { passive: true });
-    lightbox.addEventListener('touchend',   function (e) {
+    lightbox.addEventListener('touchend', function (e) {
       var dx = e.changedTouches[0].clientX - tx;
       if (Math.abs(dx) > 50) navigateLightbox(dx < 0 ? 1 : -1);
     });
