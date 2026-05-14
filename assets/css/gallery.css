@@ -12,7 +12,7 @@
   margin-bottom: 10px;
 }
 
-/* ---- Tab buttons (styled after .tour-bubbles) ---- */
+/* ---- Tab buttons ---- */
 
 .gallery-tabs {
   display: flex;
@@ -33,8 +33,10 @@
   align-items: center;
   gap: 8px;
   cursor: pointer;
-  transition: background 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+  transition: background 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
   user-select: none;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .gallery-tab span {
@@ -42,14 +44,14 @@
   text-transform: uppercase;
   letter-spacing: 0.5px;
   color: #7a7a7a;
-  transition: color 0.22s ease;
+  transition: color 0.18s ease;
 }
 
 .gallery-tab strong {
   font-size: 14px;
   font-weight: 700;
   color: #ed563b;
-  transition: color 0.22s ease;
+  transition: color 0.18s ease;
 }
 
 .gallery-tab:hover,
@@ -66,12 +68,26 @@
   color: #ffffff;
 }
 
+/* Sprečava double-click za vrijeme animacije */
+.gallery-tabs.switching {
+  pointer-events: none;
+}
+
 /* ---- Gallery grid ---- */
 
 .gallery-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 16px;
+  min-height: 300px;
+  /* Sadrži sve pozicionirane elemente */
+  position: relative;
+}
+
+/* Skeleton pulse */
+@keyframes gallery-skeleton-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.45; }
 }
 
 .gallery-item {
@@ -80,9 +96,14 @@
   box-shadow: 0 8px 22px rgba(35, 45, 57, 0.12);
   cursor: pointer;
   aspect-ratio: 4 / 3;
-  display: block;
   background: #eceff3;
-  transition: box-shadow 0.25s ease, transform 0.25s ease;
+  /* Samo hover efekti, NE opacity (filtriramo display) */
+  transition: box-shadow 0.22s ease, transform 0.22s ease;
+  will-change: transform;
+}
+
+.gallery-item.gallery-loading {
+  animation: gallery-skeleton-pulse 1.4s ease-in-out infinite;
 }
 
 .gallery-item img {
@@ -90,7 +111,12 @@
   height: 100%;
   object-fit: cover;
   display: block;
-  transition: transform 0.35s ease;
+  transition: transform 0.32s ease, opacity 0.28s ease;
+  opacity: 0;
+}
+
+.gallery-item img.loaded {
+  opacity: 1;
 }
 
 .gallery-item:hover {
@@ -102,9 +128,33 @@
   transform: scale(1.06);
 }
 
+/* ---- Skrivanje: čisti display:none, bez transitiona na samom elementu ---- */
+/* Transition se ne primjenjuje na display, pa nema glitcha */
 .gallery-item.gallery-hidden {
   display: none;
 }
+
+/* Fade-in pri pojavljivanju nove kategorije */
+@keyframes gallery-item-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.gallery-item.gallery-appearing {
+  animation: gallery-item-in 0.28s ease both;
+}
+
+/* Stagger za lijepi efekt */
+.gallery-item.gallery-appearing:nth-child(1)  { animation-delay: 0ms; }
+.gallery-item.gallery-appearing:nth-child(2)  { animation-delay: 30ms; }
+.gallery-item.gallery-appearing:nth-child(3)  { animation-delay: 60ms; }
+.gallery-item.gallery-appearing:nth-child(4)  { animation-delay: 90ms; }
+.gallery-item.gallery-appearing:nth-child(5)  { animation-delay: 120ms; }
+.gallery-item.gallery-appearing:nth-child(6)  { animation-delay: 150ms; }
+.gallery-item.gallery-appearing:nth-child(7)  { animation-delay: 180ms; }
+.gallery-item.gallery-appearing:nth-child(8)  { animation-delay: 210ms; }
+.gallery-item.gallery-appearing:nth-child(9)  { animation-delay: 240ms; }
+.gallery-item.gallery-appearing:nth-child(n+10) { animation-delay: 270ms; }
 
 /* ---- Lightbox ---- */
 
@@ -118,7 +168,7 @@
   justify-content: center;
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.28s ease, visibility 0.28s ease;
+  transition: opacity 0.25s ease, visibility 0.25s ease;
 }
 
 .gallery-lightbox.active {
@@ -142,6 +192,7 @@
   box-shadow: 0 24px 64px rgba(0, 0, 0, 0.5);
   object-fit: contain;
   display: block;
+  transition: opacity 0.18s ease;
 }
 
 .gallery-lightbox-close {
@@ -160,58 +211,67 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.2s ease;
+  transition: background 0.18s ease;
   z-index: 9001;
 }
 
-.gallery-lightbox-close:hover {
-  background: #ed563b;
+.gallery-lightbox-close:hover { background: #ed563b; }
+
+.gallery-lightbox-prev,
+.gallery-lightbox-next {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  font-size: 22px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.18s ease;
+  z-index: 9001;
 }
+
+.gallery-lightbox-prev { left: 16px; }
+.gallery-lightbox-next { right: 80px; }
+
+.gallery-lightbox-prev:hover,
+.gallery-lightbox-next:hover { background: #ed563b; }
+
+/* ---- Empty state ---- */
+.gallery-empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 60px 20px;
+  color: #aaa;
+  font-size: 15px;
+  display: none;
+}
+.gallery-empty.visible { display: block; }
 
 /* ---- Responsive ---- */
 
 @media (max-width: 1100px) {
-  .gallery-grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 14px;
-  }
+  .gallery-grid { grid-template-columns: repeat(3, 1fr); gap: 14px; }
 }
 
 @media (max-width: 767px) {
-  .gallery-section {
-    padding: 55px 0 65px;
-  }
-
-  .gallery-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-  }
-
-  .gallery-tabs {
-    gap: 10px;
-    margin-bottom: 36px;
-  }
-
-  .gallery-tab {
-    padding: 9px 16px;
-  }
-
-  .gallery-tab span {
-    font-size: 11px;
-  }
-
-  .gallery-tab strong {
-    font-size: 13px;
-  }
+  .gallery-section { padding: 55px 0 65px; }
+  .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .gallery-tabs { gap: 10px; margin-bottom: 36px; }
+  .gallery-tab { padding: 9px 16px; }
+  .gallery-tab span { font-size: 11px; }
+  .gallery-tab strong { font-size: 13px; }
+  .gallery-lightbox-prev { left: 8px; }
+  .gallery-lightbox-next { right: 72px; }
 }
 
 @media (max-width: 420px) {
-  .gallery-grid {
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-  }
-
-  .gallery-tab {
-    padding: 8px 14px;
-  }
+  .gallery-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .gallery-tab { padding: 8px 14px; }
 }

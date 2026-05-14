@@ -445,83 +445,9 @@
           </div>
         </div>
 
-        <div class="gallery-grid">
-          <!-- Route 1 -->
-          <div class="gallery-item" data-category="route_1">
-            <img src="assets/gallery/route_1/img_01.jpg" alt="Ruta 1 – slika 1" loading="lazy" />
-          </div>
-          <div class="gallery-item" data-category="route_1">
-            <img src="assets/gallery/route_1/img_02.jpg" alt="Ruta 1 – slika 2" loading="lazy" />
-          </div>
-          <div class="gallery-item" data-category="route_1">
-            <img src="assets/gallery/route_1/img_03.jpg" alt="Ruta 1 – slika 3" loading="lazy" />
-          </div>
-          <div class="gallery-item" data-category="route_1">
-            <img src="assets/gallery/route_1/img_04.jpg" alt="Ruta 1 – slika 4" loading="lazy" />
-          </div>
-          <div class="gallery-item" data-category="route_1">
-            <img src="assets/gallery/route_1/img_05.jpg" alt="Ruta 1 – slika 3" loading="lazy" />
-          </div>
-          <div class="gallery-item" data-category="route_1">
-            <img src="assets/gallery/route_1/img_06.jpg" alt="Ruta 1 – slika 4" loading="lazy" />
-          </div>
-          <!-- Route 2 -->
-          <div class="gallery-item gallery-hidden" data-category="route_2">
-            <img src="assets/gallery/route_2/img_01.jpg" alt="Ruta 2 – slika 1" loading="lazy" />
-          </div>
-          <div class="gallery-item gallery-hidden" data-category="route_2">
-            <img src="assets/gallery/route_2/img_02.jpg" alt="Ruta 2 – slika 2" loading="lazy" />
-          </div>
-          <div class="gallery-item gallery-hidden" data-category="route_2">
-            <img src="assets/gallery/route_2/img_03.jpg" alt="Ruta 2 – slika 3" loading="lazy" />
-          </div>
-          <div class="gallery-item gallery-hidden" data-category="route_2">
-            <img src="assets/gallery/route_2/img_04.jpg" alt="Ruta 2 – slika 4" loading="lazy" />
-          </div>
-          <div class="gallery-item gallery-hidden" data-category="route_2">
-            <img src="assets/gallery/route_2/img_05.jpg" alt="Ruta 2 – slika 3" loading="lazy" />
-          </div>
-          <div class="gallery-item gallery-hidden" data-category="route_2">
-            <img src="assets/gallery/route_2/img_06.jpg" alt="Ruta 2 – slika 4" loading="lazy" />
-          </div>
-          <!-- Route 3 -->
-          <div class="gallery-item gallery-hidden" data-category="route_3">
-            <img src="assets/gallery/route_3/img_01.jpg" alt="Ruta 3 – slika 1" loading="lazy" />
-          </div>
-          <div class="gallery-item gallery-hidden" data-category="route_3">
-            <img src="assets/gallery/route_3/img_02.jpg" alt="Ruta 3 – slika 2" loading="lazy" />
-          </div>
-          <div class="gallery-item gallery-hidden" data-category="route_3">
-            <img src="assets/gallery/route_3/img_03.jpg" alt="Ruta 3 – slika 3" loading="lazy" />
-          </div>
-          <div class="gallery-item gallery-hidden" data-category="route_3">
-            <img src="assets/gallery/route_3/img_04.jpg" alt="Ruta 3 – slika 4" loading="lazy" />
-          </div>
-          <div class="gallery-item gallery-hidden" data-category="route_3">
-            <img src="assets/gallery/route_3/img_05.jpg" alt="Ruta 3 – slika 3" loading="lazy" />
-          </div>
-          <div class="gallery-item gallery-hidden" data-category="route_3">
-            <img src="assets/gallery/route_3/img_06.jpg" alt="Ruta 3 – slika 4" loading="lazy" />
-          </div>
-          <!-- Buggy World -->
-          <div class="gallery-item gallery-hidden" data-category="buggy_world">
-            <img src="assets/gallery/buggy_world/img_01.jpg" alt="Buggy World – slika 1" loading="lazy" />
-          </div>
-          <div class="gallery-item gallery-hidden" data-category="buggy_world">
-            <img src="assets/gallery/buggy_world/img_02.jpg" alt="Buggy World – slika 2" loading="lazy" />
-          </div>
-          <div class="gallery-item gallery-hidden" data-category="buggy_world">
-            <img src="assets/gallery/buggy_world/img_03.jpg" alt="Buggy World – slika 3" loading="lazy" />
-          </div>
-          <div class="gallery-item gallery-hidden" data-category="buggy_world">
-            <img src="assets/gallery/buggy_world/img_04.jpg" alt="Buggy World – slika 4" loading="lazy" />
-          </div>
-          <div class="gallery-item gallery-hidden" data-category="buggy_world">
-            <img src="assets/gallery/buggy_world/img_05.jpg" alt="Buggy World – slika 3" loading="lazy" />
-          </div>
-          <div class="gallery-item gallery-hidden" data-category="buggy_world">
-            <img src="assets/gallery/buggy_world/img_06.jpg" alt="Buggy World – slika 4" loading="lazy" />
-          </div>
+                <!-- Gallery grid — populated dynamically by gallery.js (no hardcoded filenames) -->
+        <div class="gallery-grid" id="gallery-grid">
+          <p class="gallery-empty" id="gallery-empty">Nema slika u ovoj kategoriji.</p>
         </div>
       </div>
     </section>
@@ -530,6 +456,8 @@
     <!-- Lightbox (shared) -->
     <div class="gallery-lightbox" id="gallery-lightbox" role="dialog" aria-modal="true" aria-label="Lightbox">
       <button class="gallery-lightbox-close" id="gallery-lightbox-close" aria-label="Zatvori">&times;</button>
+      <button class="gallery-lightbox-prev" id="gallery-lightbox-prev" aria-label="Prethodna">&#8249;</button>
+      <button class="gallery-lightbox-next" id="gallery-lightbox-next" aria-label="Sljedeća">&#8250;</button>
       <div class="gallery-lightbox-inner">
         <img id="gallery-lightbox-img" src="" alt="" />
       </div>
@@ -812,5 +740,6 @@
     <script src="assets/js/mixitup.js"></script>
     <script src="assets/js/accordions.js"></script>
     <script src="assets/js/custom.js"></script>
+    <script src="assets/js/gallery.js"></script>
   </body>
 </html>
