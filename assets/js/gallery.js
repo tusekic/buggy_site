@@ -110,35 +110,44 @@
   function filterCategory(category) {
     if (category === activeCategory) return;
 
-    /* Blokira gumbe samo na kratko da spriječi spam-klik */
     tabsList.classList.add('switching');
     setTimeout(function () { tabsList.classList.remove('switching'); }, 300);
 
     activeCategory = category;
 
-    /* Ažuriraj aktivni tab */
     tabEls.forEach(function (el) {
       el.classList.toggle('active', el.dataset.category === category);
     });
 
-    var visible = 0;
+    /* Korak 1: sakrij sve što nije nova kategorija (sync, instant) */
     allItems.forEach(function (e) {
-      if (e.category === category) {
-        /* Prikaži i pokreni fade-in animaciju */
-        e.el.classList.remove('gallery-hidden', 'gallery-appearing');
-        /* Force reflow da animacija krene od nule */
-        void e.el.offsetWidth;
-        e.el.classList.add('gallery-appearing');
-        if (!e.img.src) loadImg(e);
-        visible++;
-      } else {
-        /* Sakrij instantno — display:none, bez transitiona */
+      if (e.category !== category) {
         e.el.classList.remove('gallery-appearing');
         e.el.classList.add('gallery-hidden');
       }
     });
 
+    /* Korak 2: prikaži novu kategoriju u sljedećem frame-u
+       — browser ima frame da makne stare elemente iz layouta,
+         pa nema glitcha ni freezea od force-reflow-a */
+    var visible = 0;
+    var toShow = [];
+    allItems.forEach(function (e) {
+      if (e.category === category) {
+        e.el.classList.remove('gallery-hidden', 'gallery-appearing');
+        if (!e.img.src) loadImg(e);
+        toShow.push(e.el);
+        visible++;
+      }
+    });
+
     if (emptyMsg) emptyMsg.classList.toggle('visible', visible === 0);
+
+    /* Dodaj animacijsku klasu tek u sljedećem animation frame —
+       bez ikakvog force reflow, browser sam zna da su elementi novi */
+    requestAnimationFrame(function () {
+      toShow.forEach(function (el) { el.classList.add('gallery-appearing'); });
+    });
   }
 
   function onAllLoaded() {
