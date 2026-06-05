@@ -1200,14 +1200,14 @@ tours carousel
 }
 
 .tour-bubbles li span {
-  font-size: 12px;
+  font-size: 10px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   color: #7a7a7a;
 }
 
 .tour-bubbles li strong {
-  font-size: 14px;
+  font-size: 12px;
   color: #ed563b;
   font-weight: 700;
 }
